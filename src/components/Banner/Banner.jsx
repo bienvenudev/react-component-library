@@ -3,8 +3,14 @@ import { FaTriangleExclamation } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
 import { BsFillInfoSquareFill } from "react-icons/bs";
 
-export default function Banner({ title, text, status }) {
-  const icon =
+export default function Banner({
+  title,
+  text,
+  status = "neutral",
+  onDismiss,
+  action,
+}) {
+  const defaultIcon =
     status === "success" ? (
       <IoCheckmarkCircle className="text-[#34D399]" />
     ) : status === "warning" ? (
@@ -27,17 +33,19 @@ export default function Banner({ title, text, status }) {
   const statusTextClasses =
     status === "success"
       ? "text-[#047857]"
-      : status === "warning" || status === "error"
+      : status === "warning"
       ? "text-[#B45309]"
+      : status === "error"
+      ? "text-[#B91C1C]"
       : "text-[#1C51B9]";
 
   return (
     <div
-      className={`p-4 ${statusClasses} rounded-md grid grid-cols-[auto_1fr] ${
+      className={`p-4 ${statusClasses} rounded-md grid grid-cols-[auto_1fr_auto] ${
         text ? "items-baseline" : "items-center"
       } gap-3`}
     >
-      <div>{icon}</div>
+      <div>{defaultIcon}</div>
 
       <div>
         {!text && status === "error" ? (
@@ -52,6 +60,28 @@ export default function Banner({ title, text, status }) {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="flex items-start gap-3">
+        {action && (
+          <button
+            onClick={action.onClick}
+            className={`text-sm font-medium ${statusTextClasses}`}
+            aria-label={action.ariaLabel}
+          >
+            {action.label}
+          </button>
+        )}
+
+        {onDismiss && (
+          <button
+            onClick={onDismiss}
+            className="text-gray-400 hover:text-gray-600"
+            aria-label="Dismiss banner"
+          >
+            <IoMdCloseCircle className="w-6 h-6 text-xl" />
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,19 @@
+import { useState } from "react";
 import Banner from "./components/Banner/Banner"; //put src to use @
+import { ToastContainer, toast } from "react-toastify";
 
 function App() {
+  const [showBanner, setShowBanner] = useState(true);
+
+  const handleAction = () => {
+    toast.info("Action button clicked!");
+  };
+
+  const handleDismiss = () => {
+    console.log("Dismiss button clicked!");
+    setShowBanner(false);
+  };
+
   return (
     <div className="min-h-[100vh] grid place-items-center p-4">
       <div className="grid grid-cols-2 gap-4">
@@ -36,9 +49,17 @@ function App() {
             status="error"
             title="There is a problem with your application"
           />
-          <Banner status="neutral" title="Update available" />
+          {showBanner && (
+            <Banner
+              status="neutral"
+              title="Update available"
+              action={{ label: "Update now", onClick: handleAction }}
+              onDismiss={handleDismiss}
+            />
+          )}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
